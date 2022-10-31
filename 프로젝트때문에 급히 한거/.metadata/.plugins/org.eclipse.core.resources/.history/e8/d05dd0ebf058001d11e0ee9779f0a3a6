@@ -1,0 +1,23 @@
+package user;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class UserDAO {
+	private Connection conn; // 자바와 디비를 연결
+	private PreparedStatement pstmt; //퀴리문 대기 및 설정
+	private ResultSet rs; //결과값 받아오기
+	
+	public UserDAO() {
+		try {
+			String dbURL = "jdbc:mysql://localhost:3006/BBS";
+			   String dbID = "root";
+			   String dbPassword = "root";
+			   Class.forName("com.mysql.jdbc.Driver");
+			   conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

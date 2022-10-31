@@ -1,0 +1,42 @@
+package user;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class UserDAO {
+	private Connection conn; // 자바와 디비를 연결
+	private PreparedStatement pstmt; //퀴리문 대기 및 설정
+	private ResultSet rs; //결과값 받아오기
+	
+	public UserDAO() {
+		try {
+			String dbURL = "jdbc:mysql://localhost:3006/BBS";
+			   String dbID = "root";
+			   String dbPassword = "root";
+			   Class.forName("com.mysql.jdbc.Driver");
+			   conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	 public int login(String userID, String userPassword) {
+		  String SQL = "SELECT userPassword FROM USER WHERE userID = ?";
+		  try {
+		   pstmt = conn.prepareStatement(SQL);
+		   pstmt.setString(1, userID);
+		   rs = pstmt.executeQuery();
+		   if (rs.next()) {
+		    if(rs.getString(1).equals(userPassword)) 
+		     return 1; // login success
+		    else 
+		     return 0; // Password invalid  
+		   }
+		   return -1; // ID unknown
+		  } catch (Exception e) {
+		   e.printStackTrace();
+		  }
+		  return -2;// DB errors
+	}
+}
